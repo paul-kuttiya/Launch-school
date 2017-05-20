@@ -3,6 +3,7 @@
 * Ruby DSL that change/define/create schema table without interecting directly with SQL known as ORM, Object Relational Mapper
 * Each migration modifies DB: add/remove/change tables or columns.
 * eg create users table command ~> **'rails generate migration create_users'**.
+* Table file name is plural, model name is singular eg. table categories, model category
 
 ```ruby
 #in migration file ...create_users.rb
@@ -129,6 +130,7 @@ end
 
 # Route and Controller
 > view all routes and path by running ~> **'rake routes'**
+> naming controller ~> tableName_controller.rb ~> posts_controller.rb
 
 * Route defines what to do with the request by sending to controller.
 
@@ -220,6 +222,7 @@ AppTemplate::Application.routes.draw do
 end
 ```
 
+## View
 * Build the link in view
 
 ```erb
@@ -228,6 +231,9 @@ end
 
 <!--routes method url helper-->
 <%= link_to 'back to all posts', posts_path %>
+
+<!--link_to is a method taking string, path as parameters-->
+<%= link_to("#{post.comments.size} comments", post_path(post)) %>
 ```
 
 * Show all posts
@@ -252,4 +258,44 @@ end
     <li><%= link_to post.title, post_path(post) %></li>
   <% end %>
 </ul>
+```
+
+### partials
+* To render partial use render following by the partial name without _
+
+```erb
+<!--render partial _menu.html.erb and passing in varible to be used in partial-->
+<%= render "menu", variable: variable %>
+```
+
+* Rendering Collections
+
+```erb
+<%= render partial: "product", collection: @products %>
+
+<!--in _product.html.erb-->
+<!--equivalent to each iteration-->
+<p>Product Name: <%= product.name %></p>
+```
+
+* Rendering Collections shorthand
+
+```erb
+<!--assuming @products is a collection instances-->
+<!--rails will find the partial by looking at the model in collection
+in this case partial name is _product.html.erb-->
+<%= render @products %>
+
+<!--custom collection with each partial-->
+<%= render [customer1, employee1, customer2, employee2] %>
+
+<!--render collection from instances attributes-->
+<!--partial _category.html.erb-->
+<%= render @product.categories %>
+
+<!--render collection with condition-->
+<%= render(@products) || "There are no products" %>
+
+render condition with html embed inside erb
+<%= render(@post.categories) || "<h6>No category</h6>".html_safe %>
 ```
