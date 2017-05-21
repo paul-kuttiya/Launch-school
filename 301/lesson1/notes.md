@@ -70,8 +70,10 @@
 **has_many :posts ~> getter and setter for posts (collection array)**.  
 **belongs_to :user ~> getter and setter for user (object)**.
 
-> virtual attributes ~> attributes that are given by association and not in the columns DB.  
-Diagram: **[1:M diagram](./1-M_association.png)**
+> virtual attributes ~> attributes that are given by association and not in the columns DB, can be use in mass assignment  
+eg. Post.create(title: "some title", creator: User.first)  
+
+> Diagram: **[1:M diagram](./1-M_association.png)**
 
 ## Set up Many to many, M:M association
 * Need join table for 2 tables, with own id and fk from each table.
