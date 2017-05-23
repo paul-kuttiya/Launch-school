@@ -192,7 +192,24 @@ end
 <h4><%= @post.title %></h4>
 ```
 
-* Routes **'resources'**
+* Controller method represent view with the same name, hence instances create within controller can pass into that view.
+
+```ruby
+def show
+  # @post can be accessed in views/posts/show.erb.html 
+  @post = Post.all
+end
+```
+
+* Class model can be passed directly into view
+
+```erb
+<% Post.all.each do |p| %>
+  <li><%= p %></li>
+<% end %>
+```
+
+#### Routes **'resources'**
 
 ```ruby
 #routes.rb

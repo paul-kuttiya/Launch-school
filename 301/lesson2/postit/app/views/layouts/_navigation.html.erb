@@ -1,0 +1,27 @@
+<ul class="nav">
+  <li>
+    <%= link_to "Postit!", root_path, :class => 'brand' %>
+  </li>
+  <li>
+    <%= link_to "link" %>
+  </li>
+  <div class="nav_item">
+    <%= link_to "new", new_post_path, class: "btn btn-success btn-small" %>
+  </div>
+  <div class="btn-group nav_item">
+    <%= link_to '#', class: "btn btn-small dropdown-toggle", 'data-toggle' => 'dropdown' do %>
+      Categories <span class="caret"></span>
+    <% end %>
+    <ul class="dropdown-menu">
+      <% Category.all.each do |cat| %>
+        <li><%= link_to cat.name, category_path(cat) %></li>
+      <% end %>
+      <li>
+        <%= link_to(new_category_path) do %>
+          <i class="icon-plus"></i>
+          New Category
+        <% end %>
+      </li>
+    </ul>
+  </div>
+</ul>

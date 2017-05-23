@@ -18,7 +18,7 @@ params = {..., "instance" => {"model_attr => "value" }, ..}
   <%= f.label :title %>
   <%= f.text_field :title %>
   <br>
-  <%= f.submit "Create", class: "some-class" %>
+  <%= f.submit "Create", class: "className" %>
 <% end %>
 ```
 
@@ -28,6 +28,11 @@ params = {..., "instance" => {"model_attr => "value" }, ..}
 * an interface for protecting attributes from mass assignment unless whitelisted.
 
 ### Form create
+* Get attributes from form with **"params"**
+
+* Use **"require"** method to return obj value ~> {title: "", url: "", creator: ""}
+
+* Use **"permit"** method to whitelisted params.
 
 ```ruby
 #Controller
@@ -57,7 +62,8 @@ class PostsController < ApplicationController
   private
   def post_params
     #require post obj key
-    #returns post's value, {title: "", url: "", creator: ""}
+    #require returns post's value, {title: "", url: "", creator: ""}
+    #permit to whitelisted params
     params.require(:post).permit(:title, :url, :creator)
 
     #whitelisted all
@@ -66,10 +72,55 @@ class PostsController < ApplicationController
 end
 ```
 
+> However the url will not go back to "/posts/new".  For redirect to "/posts/new" if failed to submit the form and show errors, use **'redirect_to'** with **flash**
+
+> flash is rails way to pass primitive(String, array, hash) between action
+
+```ruby
+  def new
+    #if errors occurs when posted from create action
+    #flash[:error] is equal to errors arrays which contains errors messages from action#create
+    @post = Post.new
+  end
+
+  def create
+    @post = Post.new(post_params)
+
+    if @post.save
+      flash[:success] = "Post created!"
+      redirect_to posts_path
+    else
+      #flash is rails way to pass primitive(String, array, hash) between action
+      #assign flash[:error] to @post.errors.full_messages which contains errors array when POST
+      flash[:error] = @post.errors.full_messages
+      #Redirect back to form
+      redirect_to new_post_path
+    end
+  end
+```
+
+```erb
+<!--_messages.html.erb-->
+<% flash.each do |name, msg| %>
+  <% if msg.is_a?(String) %>
+    <div class="alert alert-<%= name == "notice" ? "success" : "error" %>">
+      <a class="close" data-dismiss="alert">&#215;</a>
+      <%= content_tag :div, msg, :id => "flash_#{name}" %>
+    </div>
+  <% end %>
+  <% if msg.is_a?(Array) %>
+    <% msg.each do |m| %>
+      <li class="alert alert-danger">
+        <%= m %>
+      </li>
+    <% end %>
+  <% end %>
+<% end %>
+```
+
 ## Validate input
 
 * Validate in Model layer for displaying error messages.
-
 ```ruby
 #Model
 class Post < ActiveRecord::Base
@@ -78,7 +129,7 @@ class Post < ActiveRecord::Base
   # if validate fail, will returns false
   # then error messages array can be access through
   # @instance.errrors.full_messages
-  validate :title, presence: true
+  validate :title, presence: true, length: {minimum: 5}, uniqueness: true
 end
 ```
 
@@ -115,7 +166,7 @@ class PostsController < ApplicationController
   #PATCH
   def update
     if @post.update(post_params)
-      flash[:notice] = "The post is updtaed"
+      flash[:notice] = "The post is updated"
       redirect_to post_path(@post)
     else
       render :edit
@@ -184,8 +235,38 @@ end
 <!--from show action
 @post is existing obj, @comment is new obj-->
 <%= form_for [@post, @comment] do |f| %>
-  <%= f.text_area :body %>
+  <%= f.text_area :body, :id => "someId", size: "5x5" %>
   <br>
   <%= f.submit "Create", class: "some class" %>
 <% end %>
 ```
+
+### link_to helper
+* Is a_tag generator in erb template, link_to('name', url, class: "class", data-attr => "data")
+
+* for multiple data attributes use 
+{ data: { foo: "bar" } }
+
+```erb
+  <%= link_to 'link_name', url_path(path), class: "someClass", 'data-attr' => 'data' %>
+```
+
+* for a_tag with html element inside use link_to helper then pass a html block within
+
+```erb
+<% link_to(url_path) do %>
+  <!-- insert html etc here eg: -->
+  <span class="icon">Icon</span>
+<% end %>
+```
+
+* pass in erb inside erb tag, eg: create breadcrumbs
+
+* Call html_safe to pass as html inside erb tag
+
+```erb
+<% breadcrumb = link_to('All Posts', posts_path) + " &raquo; #{@category.name}".html_safe %>
+<%= render 'shared/content_title', title: breadcrumb %>
+<!--result as: All posts >> cat_name-->
+```
+

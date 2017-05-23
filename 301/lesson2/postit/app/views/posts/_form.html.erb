@@ -1,0 +1,10 @@
+<%= form_for @post do |f| %>
+  <%= f.label :title, "New Post" %>
+  <%= f.text_field :title %>
+  <%= f.label :url %>
+  <%= f.text_field :url %>
+  <%= f.label :description, "Post description" %>
+  <%= f.text_area :description, size: "5x5"  %>
+  <br>
+  <%= f.submit @post.new_record? ? "Create" : "Update" , class: "btn btn-success" %>
+<% end %>
