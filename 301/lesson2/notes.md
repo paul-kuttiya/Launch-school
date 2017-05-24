@@ -2,7 +2,7 @@
 
 * Rails comes with it owns csurf hidden input which prevent from forgery.  
 
-* Best way to create form in rails is **'model-backed forms helpers'**  
+* Best way to create **CRUD** form in rails is **'model-backed forms helpers'**  
 
 * when submitted, form will generate   
 params = {..., "instance" => {"model_attr => "value" }, ..}  
@@ -19,6 +19,23 @@ params = {..., "instance" => {"model_attr => "value" }, ..}
   <%= f.text_field :title %>
   <br>
   <%= f.submit "Create", class: "className" %>
+<% end %>
+```
+
+* Rails params will take the name of the instance as a key then assign form value from form input, { ..., post => {...} }
+
+* Inside the params instance name **post**, the value will be a key value pair of mass assignment attr and the input value from the form
+
+* rails form helper match key value from the form ~> **post[:title] => :title**
+
+* the value for instances name need to be match with mass assignment only
+
+```erb
+<!--params will assign {post => {...}} as one of params key, value-->
+<%= form_for @post do |f| %>
+  <%= f.label :title %>
+  <!--rails will assign post[:title] => :title for params-->
+  <%= f.text_field :title %>
 <% end %>
 ```
 
@@ -184,7 +201,19 @@ class PostsController < ApplicationController
 end
 ```
 
-* nested routes form ~> show comment form in "/posts/:id/comments"
+### nested routes
+
+* For form POST to nested route eg. ~> "/post/:id/comments"
+
+* define nested route in routes.rb
+
+```ruby
+  resources :posts, except: [:destroy] do
+    resources :comments, only: [:create]
+  end
+```
+
+* define comment instance to show form in parent action#show
 
 ```ruby
 #Post Controller
@@ -209,16 +238,24 @@ class PostsController < ApplicationController
 end
 ```
 
+* define POST url, create#action in comments controller
+
 ```ruby
 #Comments controller
 class CommentsController < ApplicationController
   #POST comment form
   def create
-    @comment = Comment.new(params.require(:comment).permit!)
-
-    #in nested form, parent id will have name prepended
+    #in nested form, parent_id always have name prepended
     #check with binding pry or form input
     @post = Post.find(params[:post_id])
+
+    #equivalent to
+    #@comment = Comment.new(...)
+    #@comment.post = @post
+    @comment = @post.comments.build.(params.require(:comment).permit!)
+
+    @comment.user_id = Creator.first
+    @comment.user = User.first #temp fix
 
     if @comment.save
       flash[:notice] = "Add comment"
@@ -230,14 +267,28 @@ class CommentsController < ApplicationController
 end
 ```
 
+* show comment form in "/posts/:id/comments"
+
+* need array of nested instance to match url for POST in comment form helper ~> <%= form_for [@post, @comment] do |f| %>
+
 ```erb
-<!--form template for route /posts/:id/comments-->
+<!--/posts/show.html.erb-->
 <!--from show action
 @post is existing obj, @comment is new obj-->
+<!--comment form POST to /post/:id/comments-->
 <%= form_for [@post, @comment] do |f| %>
+  <%= f.label :body %>
   <%= f.text_area :body, :id => "someId", size: "5x5" %>
   <br>
   <%= f.submit "Create", class: "some class" %>
+<% end %>
+```
+* show comments for posts/:id
+
+```erb
+<!--/posts/show.html.erb-->
+<%= @post.comments each do |c| %>
+  <%= c.body %>
 <% end %>
 ```
 
@@ -270,3 +321,61 @@ end
 <!--result as: All posts >> cat_name-->
 ```
 
+### model_ids helper method virtual attribute for M:M
+* To submit multiples value as array in form params, name needs to end with '[]', eg:
+
+```erb
+<!--params will create {..., options => ["1", "2"]}-->
+<select multiple='multiple' name='options[]'>
+  <option value="1">1</option>
+  <option value="1">2</option>
+</select>
+```
+
+*  get all ids association ~> model_ids
+
+```ruby
+  #getter
+  @post.category_ids # returns [1, 2]
+  
+  #setter
+  @post.category_ids = [3] # returns [3]
+```
+
+* form_helper check_boxes ~> submmit all values in array through key category_ids which equal virtual attr for M:M
+
+```erb
+<!--...some code-->
+<%= f.collection_check_boxes :category_ids, Category.all, :id, :name do |cb| %>
+  <% cb.label(class: "checkbox inline") {cb.check_box(class: "checkbox") + cb.text} %>
+<% end %>
+```
+
+* define strong parameter to allow arrays in controller
+
+```ruby
+# posts_controller
+#...some code
+
+private
+def post_params
+  #define strong parameter for arrays ~> category_ids
+  params.require(:post).permit(:title, :url, :description, category_ids: [])
+end
+```
+
+### view helper
+* all view helpers located at **'/helpers/application_helper.rb'**
+
+```ruby
+module ApplicationHelper
+  def display_datetime(dt)
+    dt.strftime("%m/%d/%Y %l:%M%P %Z")
+  end
+end
+```
+
+* include method in erb view
+```erb
+  <%= display_datetime(post.created_at) %>
+```

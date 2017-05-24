@@ -5,7 +5,7 @@
     <p><%= post.description %></p>
     <p>
       <span class="quiet">posted by user</span>
-      <small>at <%= post.created_at %></small>
+      <small>at <%= display_datetime(post.created_at) %></small>
     </p>
     <span>
       <%= link_to("#{post.comments.size} comments", post_path(post)) %>

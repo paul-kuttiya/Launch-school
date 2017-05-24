@@ -5,12 +5,15 @@ class PostsController < ApplicationController
     @posts = Post.all
   end
 
-  def show; end
+  def show
+    @comment = Comment.new
+  end
 
   def new
     #if errors occurs when posted from create action
     #flash[:error] is equal to errors arrays which contains errors messages from action#create
     @post = Post.new
+    @comment = Comment.new
   end
 
   def create

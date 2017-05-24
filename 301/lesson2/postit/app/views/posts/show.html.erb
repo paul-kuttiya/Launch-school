@@ -6,3 +6,12 @@
 <%= render "shared/content_title", title: @post.title %>
 <%= @post.description %>
 <hr>
+
+<%= form_for [@post, @comment] do |f| %>
+  <%= f.label :body, "Comment" %>
+  <%= f.text_area :body, size: "5x5" %>
+  <br>
+  <%= f.submit "Create", class: "btn btn-success" %>
+<% end %>
+
+<%= render(@post.comments) %>
