@@ -21,17 +21,19 @@ end
 * migrate to DB ~> `rake db:migrate`
 
 * define **has_secure_password** in the Model  
-set validation to **false** to turn off password validation
+~> password validations used for password confirmation  
+~> need password and password_confirmation for validations  
+~> for manual password validation, set validations to **false** to turn off password_confirmation
 
 ```ruby
 class User < ActiveRecord::Base
 #... some code
-  has_secure_password validation: false
+  has_secure_password validations: false
 end
 ```
 
 * need to work with bcrypt **'bcrypt-ruby'**  
-~> add `bcrypt-ruby', '=3.0.1`  to gem file  
+~> add `gem 'bcrypt-ruby', '~> 3.0.0'`  to gem file  
 ~> without postgresql **bundle install --without production**
 
 * `has_secure_password` method gives ONLY **setter** virtual attributes without getter  
