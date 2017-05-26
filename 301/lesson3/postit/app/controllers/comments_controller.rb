@@ -2,7 +2,10 @@ class CommentsController < ApplicationController
   def create
     @post = Post.find(params[:post_id]);
     @comment = @post.comments.build(params.require(:comment).permit(:body));
-    @comment.creator = User.first
+
+    #obj to obj, id to id
+    #virtual attr creator to current_user obj
+    @comment.creator = current_user
 
     if @comment.save
       flash[:notice] = "Saved comment"

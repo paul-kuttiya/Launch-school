@@ -21,7 +21,7 @@ end
 * migrate to DB ~> `rake db:migrate`
 
 * define **has_secure_password** in the Model  
-~> password validations used for password confirmation  
+~> password validations used for password_confirmation  
 ~> need password and password_confirmation for validations  
 ~> for manual password validation, set validations to **false** to turn off password_confirmation
 
@@ -32,9 +32,14 @@ class User < ActiveRecord::Base
 end
 ```
 
-* need to work with bcrypt **'bcrypt-ruby'**  
-~> add `gem 'bcrypt-ruby', '~> 3.0.0'`  to gem file  
-~> without postgresql **bundle install --without production**
+* need to work with bcrypt **'bcrypt-ruby'** & **'bcrypt'**
+~> add gem to Gemfile
+~> without postgresql `bundle install --without production`
+~> `bundle update`
+```ruby
+gem 'bcrypt-ruby', '~> 3.0.1'
+gem 'bcrypt', '~> 3.1.7'
+```
 
 * `has_secure_password` method gives ONLY **setter** virtual attributes without getter  
 ~> setter: `u.password = 'password'`   
@@ -48,6 +53,14 @@ end
 
 ## Create user registration and login
 ### - USER
+
+* validates username in User model  
+~> validates :username, presence: true, uniqueness: true  
+
+* validates password in User Model, **ONLY FOR create action**  
+~> errors only for create action  
+~> validates :password, presence: true, on: :create, length: {minimum: 3}
+
 * Create user routes
 ~> specified custom routes, and create users route 
 ```ruby
@@ -55,20 +68,56 @@ end
 #... some code
 
 #rails auto create 'register_path' method
-get '/register', to: 'users#new'
 get '/login', to: 'sessions#new' #login form
 post '/login', to: 'sessions#create'
 get '/logout', to: 'session#destroy'
 
+get '/register', to: 'users#new'
 resources :users, only: [:create]
 ```
 * create action in users_controller and form in views
+```ruby
+#users_controller
+class UsersController < ApplicationController
+  def new
+    @user = User.new
+  end
 
-* validates username in User model  
-~> validates :username, presence: true, uniqueness: true  
+  def create
+    @user = User.new(user_params)
 
-* validates password in User Model, **ONLY FOR create action**  
-~> validates :password, presence: true, on: :create, length: {minimum: 3}
+    if @user.save
+      flash[:notice] = "Registered"
+      redirect_to root_path
+    else
+      flash[:error] = @user.errors.full_messages
+      redirect_to register_path
+    end
+  end
+
+  private
+  def user_params
+    params.require(:user).permit(:username, :password)
+  end
+end
+```
+
+```erb
+<!--form-->
+<div class="well">
+  <%= form_for @user do |f| %>
+    <div class="control-group">
+      <%= f.label :username %>
+      <%= f.text_field :username %>
+    </div>
+    <div class="control-group">
+      <%= f.label :password %>
+      <%= f.password_field :password %>
+    </div>
+    <%= f.submit "Register", class: 'btn btn-success' %>
+  <% end %>
+</div>  
+```
 
 ### - SESSION
 * For user login
@@ -202,5 +251,94 @@ end
 def create
   #...
   @post.creator = current_user
+end
+```
+
+### pass extra params key into _route_path_ method
+
+* eg: use for tabs  
+
+* pass extra key: value into _route_path_ method  
+~> `user_path(@user, tab: 'comments')`  
+~> access value by `params[:key]`   
+~> the link will generate `url?key=value`
+
+* eg: display **li="active"** base on `params[:tab]` conditions
+
+```erb
+<ul class="nav nav-tabs">
+  <li class=<%= "active" if params[:tab].nil? %>>
+    <%= link_to "Posts (#{@user.posts.size})", user_path(@user) %>
+  </li>
+  <li class=<%= "active" if params[:tab] == "comments" %>>
+    <%= link_to "Comments (#{@user.comments.size})", user_path(@user, tab: 'comments') %>
+  </li>
+</ul>
+```
+
+* show tab elements based on params[:tab] condotion
+```erb
+<% if params[:tab].nil? %>
+  <% @user.posts.each do |post| %>
+    <%= render '/posts/post', post: post %>
+  <% end %>
+<% elsif params[:tab] == "comments" %>
+  <% @user.comments.each do |comment| %>
+    <%= render '/comments/comment', comment: comment, show_post: true %>
+  <% end %>
+<% end %>
+```
+
+* create show_post condition, and set link to user and post source.  
+~> link_to() user and post base on user/post  
+~> set `show_post ||= false` in comment template  
+~> when render template pass in `show_post: true` if want to show.
+
+```erb
+<% show_post ||= false %>
+
+<div class="row">
+  <div class="span4 well">
+    <% if show_post %>
+      <p>on <em><%= link_to comment.post.title, post_path(comment.post) %></em></p>
+    <% end %>
+    <em><%= comment.body %></em>
+    <p>
+      <span class="quiet">posted by <%= link_to(comment.creator.username, user_path(comment.creator)) %></span>
+      <small>at <%= comment.created_at %></small>
+    </p>
+  </div>
+</div>
+```
+
+* disallowed editing other users  
+~> add before_action method to check if current_user  
+which stord in the session is the same as user at params[:id]  
+
+```ruby
+class UsersController < ApplicationController
+  before_action :set_user, only: [:show, :edit, :update]
+  before_action :require_same_user, only: [:edit, :update]
+
+#other code...
+  def edit; end
+
+  def update
+    #some code
+  end
+
+  private
+  #other code...
+
+  def set_user
+    @user = User.find(params[:id])
+  end
+
+  def require_same_user
+    unless @user = current_user
+      flash[:error] = "not permit"
+      redirect_to user_path(current_user)
+    end
+  end
 end
 ```
