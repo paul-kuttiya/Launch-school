@@ -211,14 +211,16 @@ end
 
 #### Routes **'resources'**
 
+* resources will generate routes and **'..._path'** method for all routes
+
 ```ruby
 #routes.rb
 AppTemplate::Application.routes.draw do
   #...some code
 
-  # get '/post', to: 'posts#index'
+  # get '/posts', to: 'posts#index'
   # get '/posts/:id', to: 'posts#show'
-  # get '/post/new', to: 'posts#new'
+  # get '/posts/new', to: 'posts#new'
   # post '/posts', to: 'posts#create'
   # get '/posts/:id/edit', to: 'posts#edit'
   # patch '/posts/:id', to: 'posts#update'
