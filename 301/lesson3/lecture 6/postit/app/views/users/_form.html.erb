@@ -1,0 +1,18 @@
+<div class="well">
+  <%= form_for @user do |f| %>
+    <div class="control-group">
+      <%= f.label :username %>
+      <%= f.text_field :username %>
+    </div>
+    <div class="control-group">
+      <%= f.label :password %>
+      <%= f.password_field :password %>
+    </div>
+    <div class="control-group">
+      <%= f.submit(@user.new_record? ? "Register" : "Edit", class: 'btn btn-success') %>
+      <% unless logged_in? %>
+        <%= link_to "Login", login_path %>
+      <% end %>
+    </div>
+  <% end %>
+</div>

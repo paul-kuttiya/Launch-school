@@ -24,10 +24,10 @@ class CreateVotes < ActiveRecord::Migration
   def change
     create_table :votes do |t|
       t.boolean :vote
-      t.integer :id
       t.integer :user_id
-      t.string :voteable_type
-      t.integer :voteable_id
+      #t.string :voteable_type
+      #t.integer :voteable_id
+      t.references :voteable, polymorphic: true #shorthand
       t.timestamps
     end
   end
@@ -58,6 +58,7 @@ end
 ```ruby
 #post.rb
 #additional code
+#f_key is from 2 columns voteable 
 has_many :votes, as: :voteable
 ```
 
@@ -74,8 +75,10 @@ has_many :votes, as: :voteable
 #modify code
 resources :posts, except: [:destroy] do
   #every members ~> posts/:id
+  
   member do
     #POST route only for /vote on posts route members ~> /posts/:id
+    #call post | get method pass route in
     post :vote # => controller posts#vote
   end
 end
@@ -103,7 +106,10 @@ end
 </div>
 ```
 
-* implement vote action in Posts controller
+* implement vote action in Posts controller  
+~> Work flow not CRUD with model-backed form  
+~> No errors will validates on instance  
+~> need flash to show errors manually
 
 ```ruby
 #posts_controller
@@ -184,11 +190,49 @@ def
 end
 ```
 
-* user can only vote post single time for each post  
+* user can only vote post and comment single time for each post  
 ~> validates association for specific scope  
 ~> validates uniqueness of creator for voteable scope
 ```ruby
 #models/vote.rb
 #additional code
-validates_uniqueness_of :creator, scope: :voteable
+validates_uniqueness_of :creator, scope: [:voteable_id, :voteable_type]
+```
+
+### Comment votes
+* assigning routes for POST comments/:id/votes
+```ruby
+#routes.rb
+#modify code
+resources :posts, except: [:destroy] do
+  member do
+    post :vote
+  end
+
+  resources :comments, only: [:create] do
+    # generate /posts/:post_id/comments/:id
+    member do
+      post :vote # => comments#vote
+    end
+  end
+end
+```
+
+* assigning POST links in view  
+~> need 2 parameters for _path method  
+~> parameters need to be instance for each model, in order from url   
+~> `/posts/:post_id/comments/:id`
+
+```erb
+<div class="span0 well text-center">
+  <%= link_to vote_post_comment_path(comment.post, comment, vote: true), method: 'post' do %>
+    <i class="icon-arrow-up"></i>
+  <% end %>
+  <br>
+  <%= comment.total_votes %> Votes
+  <br>
+  <%= link_to vote_post_comment_path(comment.post, comment, vote: false), method: 'post' do %>
+    <i class="icon-arrow-down"></i>
+  <% end %>
+</div>
 ```
