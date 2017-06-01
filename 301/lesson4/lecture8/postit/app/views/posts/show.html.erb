@@ -1,0 +1,19 @@
+<% if current_user == @post.creator %>
+  <p>[<%= link_to "edit_post", edit_post_path(@post) %>]</p>
+<% end %>
+
+<%= render @post.categories %>
+<%= render "shared/content_title", title: @post.title %>
+<%= @post.description %>
+<hr>
+
+<% if logged_in? %>
+  <%= form_for [@post, @comment] do |f| %>
+    <%= f.label :body, "Comment" %>
+    <%= f.text_area :body, size: "5x5" %>
+    <br>
+    <%= f.submit "Create", class: "btn btn-success" %>
+  <% end %>
+<% end %>
+
+<%= render(@post.comments) %>

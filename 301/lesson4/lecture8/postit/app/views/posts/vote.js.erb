@@ -1,0 +1,6 @@
+<% if @vote.valid? %>
+  $('span#post_votes_<%= @post.id %>').text('<%= @post.total_votes %>')
+<% else %>
+  <% flash[:error] = 'something wrong' %>
+  window.location.reload();
+<% end %>
