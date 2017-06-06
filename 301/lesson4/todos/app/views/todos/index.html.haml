@@ -1,0 +1,12 @@
+%main
+  %h1 Todos
+  %ul#todos
+    %li
+      %a.toggle
+      %p abc
+      .modify-wrap
+        %a.modify E
+        %a.modify X
+  %footer
+    = link_to "New Todo", new_todo_path, id: "new"
+    %a#clear{:href => "#"} Clear completed

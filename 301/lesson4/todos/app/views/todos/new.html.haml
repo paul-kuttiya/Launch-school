@@ -1,0 +1,10 @@
+%main
+  %h1 Todos
+  = form_for @todo, method: "post" do |f|
+    %fieldset
+      = f.text_field :title, placeholder: "What needs to be done?"
+      -# = f.date_field :date
+      -# = date_field("date", "time", {required: true})
+      = f.text_area :description, placeholder: "Additional information."
+      = f.submit "Submit", class: "button"
+      %button= link_to "Cancel", root_path

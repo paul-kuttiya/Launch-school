@@ -1,0 +1,171 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the top of the
+ * compiled file, but it's generally better to create a new file per style scope.
+ *
+ *= require_self
+ *= require_tree .
+ */
+
+::-webkit-input-placeholder { /* Chrome */
+  color: #C7C7CD;
+}
+:-ms-input-placeholder { /* IE 10+ */
+  color: #C7C7CD;
+}
+::-moz-placeholder { /* Firefox 19+ */
+  color: #C7C7CD;
+  opacity: 1;
+}
+:-moz-placeholder { /* Firefox 4 - 18 */
+  color: #C7C7CD;
+  opacity: 1;
+}
+
+html, body {
+  padding: 25px 0;
+  margin: 0;
+  font: normal 16px Helvetica, Arial, sans-serif;
+  color: #2d98f1;
+}
+
+main {
+  display: block;
+  max-width: 450px;
+  padding: 20px;
+  margin: 0 auto;
+  background: #ffffff;
+  box-sizing: border-box;
+  box-shadow: 0px 1px 10px 5px rgba(136, 136, 136, 0.42);
+}
+
+h1 {
+  text-align: center;
+  color: #cc183e;
+}
+
+fieldset {
+  padding: 0 0 25px 0;
+  margin: 0;
+  border: none;
+}
+
+input[type="text"], input[type="date"], textarea {
+  width: 49%;
+  height: 30px;
+  padding: 5px;
+  margin: 0 0 5px 0;
+  font: normal 16px Georgia, Palatino, serif;
+  border: 1px solid #cecece;
+  box-sizing: border-box;
+}
+
+input[type="date"] {
+  float: right;
+}
+
+input[type=date]:invalid::-webkit-datetime-edit {
+  color: #C7C7CD;
+}
+
+textarea {
+  width: 100%;
+  height: 60px;
+  resize: none;
+}
+
+input[type="submit"], button {
+  font-size: 1em;
+  text-decoration: none;
+  background-color: #cc183e;
+  padding: 5px;
+  border-radius: 3px;
+  border: none;
+  color: white;
+}
+
+button a {
+  text-decoration: none;
+  color: white;
+}
+
+input[type="submit"]:hover, button:hover {
+  filter: grayscale(0.75);
+  cursor: pointer;
+}
+
+#todos {
+  padding-left: 0;
+  list-style: none;
+}
+
+#todos li { padding: 10px; }
+#todos li + li { border-top: 1px solid #ececec; }
+#todos li a {
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+  width: 16px;
+  height: 16px;
+  text-align: center;
+  vertical-align: middle;
+  color: #2d98f1;
+  border: 1px solid #cecece;
+  border-radius: 3px;
+  background: #ffffff;
+}
+
+#todos li.complete a.toggle:after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 16px;
+  height: 16px;
+  content: "✓";
+}
+
+#todos li.complete p {
+	text-decoration: line-through;
+	color: #e7e7e7;
+}
+
+.modify-wrap {
+  float: right;
+}
+
+#todos a.modify {
+	border: none;
+	vertical-align: -2px;
+}
+
+#todos a.modify:hover {
+	color: red;
+  cursor: pointer;
+}
+
+#todos a + p {
+	display: inline;
+}
+
+footer {
+  clear: both;
+  overflow: hidden;
+}
+
+#clear, #new {
+	color: #b00b00;
+	text-decoration: none;
+}
+
+#new {
+  float: left;
+}
+
+#clear {
+  float: right;
+}
