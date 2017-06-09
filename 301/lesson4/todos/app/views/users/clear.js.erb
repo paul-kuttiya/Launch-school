@@ -1,0 +1,4 @@
+var $alert = $('<div />', {"class": "alert alert-success", "text": `<%= @notice %>`});
+$alert.prependTo($('body')).fadeOut(3000);
+
+$('li.complete').remove()

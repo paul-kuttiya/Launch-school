@@ -1,0 +1,7 @@
+%main
+  %h1 Todos
+  = render 'dropdown'
+  - if @todos.empty?
+    %h4 There is no todos.
+  = render 'todos'
+  = render 'footer'

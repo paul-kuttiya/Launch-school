@@ -1,0 +1,8 @@
+.dropdown
+  = link_to "#", class: 'drop' do
+    Filter by
+    %span.down-caret
+  %ul.dropdown-menu
+    %li= link_to "all", user_path(current_user)
+    %li= link_to "completed", user_path(current_user, completed: true)
+    %li= link_to "active", user_path(current_user, completed: false)

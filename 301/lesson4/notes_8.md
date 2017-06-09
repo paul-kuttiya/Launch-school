@@ -86,3 +86,19 @@ end
 * Testing the gem locally  
 ~> include the path after gem in Gemfile  
 => `gem 'something', path: 'local_path'`  
+
+# Pagination
+* use `limit` and `offset`  
+~> define PER_PAGE constance in class controller  
+~> display pagination with link_to in view  
+~> use extra params passed in `_path(`) helper  
+~> handle in controller
+
+* Define `default_scope` in model to set default for instances  
+```ruby
+#Post model
+#additional code
+
+default_scope { order('created_at ASC') }
+```
+

@@ -1,12 +1,9 @@
 %main
   %h1 Todos
-  %ul#todos
-    %li
-      %a.toggle
-      %p abc
-      .modify-wrap
-        %a.modify E
-        %a.modify X
-  %footer
-    = link_to "New Todo", new_todo_path, id: "new"
-    %a#clear{:href => "#"} Clear completed
+  %table
+
+    - @todos.each do |todo|
+      %tr
+        %td= "\"#{shorten(todo.title)}\""
+        %td= "#{time_ago_in_words(todo.created_at)} ago"
+        %td= "by #{todo.user.username}"

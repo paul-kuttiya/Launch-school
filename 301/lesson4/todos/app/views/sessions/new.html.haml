@@ -1,0 +1,15 @@
+%main
+  %h1 Login
+  = form_tag("/login", method: "post") do
+    %fieldset
+      .user_wrap
+        .user_box
+          = label_tag :username
+          = text_field_tag :username, nil, placeholder: "username"
+        .user_box
+          = label_tag :password
+          = password_field_tag :password, nil, placeholder: "password"
+        .user_box
+          = submit_tag 'Login', class: "button"
+          %button= link_to "Cancel", root_path, method: "get"
+          = link_to "New member?", register_path, class: 'return'

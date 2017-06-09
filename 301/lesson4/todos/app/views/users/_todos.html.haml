@@ -1,0 +1,13 @@
+%ul#todos
+  -@todos.each do |todo|
+    %li{class: (todo.completed ? "complete" : nil), "data-id" => todo.id}
+      = link_to "", completed_todo_path(todo), class: "toggle", method: "post", remote: true
+      %p= shorten(todo.title)
+      %p.date= todo.completed_at
+      .modify-wrap
+        = link_to edit_todo_path(todo), class: "modify" do
+          %i.fa.fa-pencil
+        = link_to todo_path(todo), method: "delete", |
+          data: {confirm: "Are you sure?"}, remote: true, class: "modify" do
+          %i.fa.fa-trash-o
+      %p.small= todo.description

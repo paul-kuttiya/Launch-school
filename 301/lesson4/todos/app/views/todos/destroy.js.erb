@@ -1,0 +1,3 @@
+var $alert = $('<div />', {"class": "alert alert-success", "text": `<%= @notice %>`});
+$('#todos').find('li[data-id=<%= @todo.id %>]').remove();
+$alert.prependTo($('body')).fadeOut(3000);

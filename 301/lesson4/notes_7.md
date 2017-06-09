@@ -30,9 +30,9 @@ def vote
     #Normal flow
     format.html { redirect_to :back, notice: "Voted" }
 
-    #Ajax flow
     #format.js { render json: @post.to_json } #response will be json: @post
     
+    #Ajax flow
     #By default will render views/controller_name/#action.js.erb
     #Render views/posts/vote.js.erb
     format.js

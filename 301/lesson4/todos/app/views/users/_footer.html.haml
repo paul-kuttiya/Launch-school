@@ -1,0 +1,4 @@
+%footer
+  = link_to "New Todo", new_todo_path, id: "new"
+  = link_to "Clear completed", clear_todos_user_path, id: "clear", method: 'post', |
+    data: {confirm: "Are you sure?"}, remote: true

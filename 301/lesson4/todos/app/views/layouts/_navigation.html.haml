@@ -1,0 +1,17 @@
+%nav.user
+  - if logged_in?
+    = link_to user_path(current_user), method: "get" do
+      %i.fa.fa-user
+      = current_user.username
+    %span | |
+    = link_to logout_path, method: "delete" do
+      %i.fa.fa-sign-out
+      Logout
+  - else
+    = link_to login_path do
+      %i.fa.fa-sign-in
+      Login
+    %span | |
+    = link_to register_path do
+      %i.fa.fa-registered
+      Register

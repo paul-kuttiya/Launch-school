@@ -1,0 +1,23 @@
+= render "/shared/errors", errors: @todo.errors.full_messages
+
+%main
+  %h1 Todos
+  = form_for @todo do |f|
+    %fieldset
+      = f.text_field :title, placeholder: "What needs to be done?"
+      = f.date_field :completed_at, 'data-date'=> @todo.completed_at
+      = f.text_area :description, placeholder: "Additional information."
+      = f.submit @todo.new_record? ? "Create" : "Update", class: "button"
+      %button= link_to "Cancel", user_path(current_user), method: "get"
+
+:javascript
+  $(function(){
+    var date = $('input[type="date"]');
+    date.on('change', function(e) {
+      $(this).css('color', 'black')
+    });
+    date.val(`#{@todo.completed_at}`);
+    if (!!date.val()) {
+      date.css('color', 'black');
+    }
+  });

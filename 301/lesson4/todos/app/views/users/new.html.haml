@@ -1,0 +1,17 @@
+= render "/shared/errors", errors: @user.errors.full_messages
+
+%main
+  %h1 Register
+  = form_for @user, url: register_path(@user), method: "post" do |f|
+    %fieldset
+      .user_wrap
+        .user_box
+          = f.label :username
+          = f.text_field :username, placeholder: "username"
+        .user_box
+          = f.label :password
+          = f.password_field :password, placeholder: "password"
+        .user_box
+          = f.submit @user.new_record? ? "Register" : "Update", class: "button"
+          %button= link_to "Cancel", root_path, method: "get"
+          = link_to "Returning member?", login_path, class: 'return'
