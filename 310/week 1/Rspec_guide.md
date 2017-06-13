@@ -4,12 +4,8 @@
 ~> function testing; controllers  
 ~> integration testing; buiness, users interaction
 
-### Rspec
-
-* install rspec-rails  
-~> gem 'rspec-rails'
-
-* configure in Gemfile
+### Rspec v.2.99
+* install and configure in Gemfile
 ```ruby
   group :test, :development do
     gem "rspec-rails"
@@ -26,7 +22,11 @@
 ~> `/spec/models/model_name_spec.rb`  
 
 * load spec env and associating class  
-~> `require 'spec_helper'` 
+```ruby
+#.rspec
+--color
+--require 'spec_helper'
+```
 
 * Create test using specification philosophy steps  
 ~> describe something  
@@ -51,10 +51,34 @@
     end
   end
 ```
+#### Test DB
+* Create test schema by running migration for test db  
+~> make sure `rake db:migrate` is run  
+~> `rake db:test:prepare`
 
 * run rspec in project root folder  
 ~> `rspec`
 
-#### Test DB
-* Create test schema by running migration for test db  
-~> `rake db:migrate db:test:prepare`
+### Shoulda matcher
+* Real testing environment should test only our code not rails  
+~> using shoulda matcher  
+~> test declaration of our code  
+~> come with methods that tests common rails functionality; matchers  
+~> matchers methods can be checked on git repo
+
+* install shoulda matcher
+```ruby
+  group :tests do
+    gem 'shoulda-matchers'
+  end
+
+  #run bundle
+```
+
+* use shoulda for code testing
+```ruby
+  describe Video do
+    it { should belong_to(:category) }
+    it {  }
+  end
+```

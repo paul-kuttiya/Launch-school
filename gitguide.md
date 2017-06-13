@@ -10,3 +10,7 @@
 
 * create new branch  
 ~> `git chechout [branch_name] -b`
+
+* disable username and pass input validation  
+~> `git config -l`  
+~> `git config remote.origin.url https://{username}:{password}@github.com/{username}/{repo}.git`
