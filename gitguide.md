@@ -11,6 +11,10 @@
 * create new branch  
 ~> `git chechout [branch_name] -b`
 
-* disable username and pass input validation  
+* disable username and pass input validation for certain project  
 ~> `git config -l`  
 ~> `git config remote.origin.url https://{username}:{password}@github.com/{username}/{repo}.git`
+
+* timeout user validation  
+~> `git config --global url."https//{username}@github.com".insteadOf "https://github.com"`  
+~> `git config --global credential.helper 'cache --timeout=28800'`
