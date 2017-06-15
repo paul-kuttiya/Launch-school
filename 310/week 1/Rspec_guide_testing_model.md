@@ -61,7 +61,7 @@
 
 ### Shoulda matcher
 * Real testing environment should test only our code not rails  
-~> using shoulda matcher  
+~> using shoulda matcher for rails function that our code implemented with   
 ~> test declaration of our code  
 ~> come with methods that tests common rails functionality; matchers  
 ~> matchers methods can be checked on git repo
@@ -82,3 +82,7 @@
     it {  }
   end
 ```
+
+### TDD
+* Test driven development  
+~> Write test as objective then implement code to match objective  
