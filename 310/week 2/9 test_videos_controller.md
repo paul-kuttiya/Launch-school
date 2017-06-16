@@ -13,6 +13,10 @@
 ~> `gem 'faker`  
 ~> run `bundle`
 
+* Fabricate gem will generate obj model each run  
+
+* Faker gem will generate random attributes
+
 * create `spec/fabricators/video_fabricator.rb`  
 ```ruby
 Fabricator(:video) do
@@ -29,6 +33,11 @@ Fabricator(:user) do
   full_name { Faker::Name.name }
 end
 ```
+* User fabricate in spec  
+~> `Fabricate(:user)`  
+
+* Overwrite fabricate in spec  
+~> `Fabricate(:video, title: 'some title')`
 
 # rspec matchers 
 * `describe VideosController do`  
@@ -51,7 +60,7 @@ end
 ~> create fake data for video instance  
 
 * `assigns(:video)`  
-~> @video instance in describe controller#action  
+~> @video instance in `describe GET show`   
 
 * `get :show, id: video.id`  
 ~> get show action, pass id for show_path
@@ -63,4 +72,9 @@ end
 * `expect(response).to redirect_to some_path`  
 ~> expect response to redirect
 
-* 
+* `get :search, query: "vid"`  
+~> get videos#search, pass query as 'vid'  
+~> get url `search?query=vid`  
+
+* run rspec by item  
+~> `spec/controllers/videos_controller_spec.rb:28`
