@@ -101,3 +101,183 @@ end
 * `let(:user) {Fabricate(:user)}`  
 ~> store user with value passsed in the method as block  
 ~> let will stored variable and can be in the same test context
+
+```ruby
+#videos_controller test
+describe VideosController do
+  describe 'GET show' do
+    it 'sets @video for auth users' do
+      session[:user_id] = Fabricate(:user).id
+      video = Fabricate(:video)
+      get 'show', id: video.id
+
+      expect(assigns[:video]).to eq(video)
+    end
+
+    it 'redirects to sign in path for unauthenticated user' do
+      video = Fabricate(:video)
+      get 'show', id: video.id
+
+      expect(response).to redirect_to sign_in_path
+    end
+  end
+
+  describe "GET search" do
+    it 'sets @videos for auth users' do
+      session[:user_id] = Fabricate(:user).id
+      video = Fabricate(:video, title: 'video')
+      get :search, query: "vid"
+
+      expect(assigns[:videos]).to eq([video])
+    end
+
+    it 'redirects for unauthenticated users' do
+      get :search, query: "video"
+
+      expect(response).to redirect_to sign_in_path
+    end
+  end
+end
+```
+
+```ruby
+#users_controller test
+describe UsersController do
+  describe "GET new" do
+    it "sets @user" do
+      get :new
+      expect(assigns[:user]).to be_instance_of(User)
+    end
+
+    it "redirects user if signed in" do
+      session[:user_id] = Fabricate(:user).id
+      get :new
+      expect(response).to redirect_to home_path
+    end
+  end
+
+  describe "POST create" do
+    context "valid users" do
+      before do
+        post :create, user: {full_name: 'abc', email: 'abc@gg.com', password: '1234'}
+      end
+
+      it "saves user" do
+        expect(User.count).to eq(1)
+      end
+
+      it "stored user in session" do
+        expect(session[:user_id]).not_to be_nil
+      end
+
+      it "shows notification" do
+        expect(flash[:success]).not_to be_blank
+      end
+
+      it "redirects to home path" do
+        expect(response).to redirect_to home_path
+      end
+    end
+  
+    context "invalid users" do
+      before do
+        post :create, user: {email: 'abc@gg.com', password: '1234'}
+      end
+
+      it "sets user" do
+        expect(assigns[:user]).to be_instance_of(User)
+      end
+
+      it "does not create user" do
+        expect(User.count).to be(0)
+      end
+
+      it "render new template" do
+        expect(response).to render_template :new
+      end
+      
+      it "shows error" do
+        errors = assigns[:user].errors.full_messages.size
+        expect(errors).not_to be(0)
+      end
+    end
+  end
+end
+```
+
+```ruby
+#sessions_controller test
+describe SessionsController do
+  describe "GET new" do
+    it "renders new template for unautherized user" do
+      get :new
+      expect(response).to render_template(:new)
+    end
+    
+    it "redirect to home page for authrorized user" do
+      session[:user_id] = Fabricate(:user).id
+      get :new
+      expect(response).to redirect_to home_path
+    end
+  end
+
+  describe "POST create" do
+    context "valid credentials" do
+      let(:user) {Fabricate(:user)}
+      before do
+        post :create, email: user.email, password: user.password
+      end
+      
+      it "stores user session" do
+        expect(session[:user_id]).to be(user.id)
+      end
+
+      it "flash success message" do
+        expect(flash[:success]).not_to be_blank
+      end
+
+      it "redirects to home path" do
+        expect(response).to redirect_to home_path
+      end
+    end
+
+    context "invalid credential" do
+      let(:user) {Fabricate(:user)}
+      before do
+        post :create, email: user.email, password: user.password + 'abcd'
+      end
+
+      it "does not store session" do
+        expect(session[:user_id]).to be_nil
+      end
+
+      it "flash danger message" do
+        expect(flash[:danger]).not_to be_blank
+      end
+
+      it "redirects to sign in path" do
+        expect(response).to redirect_to(sign_in_path)
+      end
+    end
+
+    context "GET destroy" do
+      before do
+        session[:user_id] = Fabricate(:user).id
+        get :destroy
+      end
+
+      it "destroys user sessions" do
+        expect(session[:user_id]).to be_nil
+      end
+
+      it "shows sign out message" do
+        expect(flash[:notice]).not_to be_blank
+      end
+
+      it "redirects to root" do
+        expect(response).to redirect_to root_path
+      end
+    end
+  end
+end
+```
