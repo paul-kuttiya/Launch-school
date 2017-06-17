@@ -36,6 +36,7 @@ end
 ```
 * User fabricate in spec  
 ~> `Fabricate(:user)`  
+~> This stores user obj in Database
 
 * Overwrite fabricate in spec  
 ~> `Fabricate(:video, title: 'some title')`
@@ -85,6 +86,7 @@ end
 
 * `post :create, user: {...}`  
 ~> post to action, passing user obj to that action  
+~> post body will be each user[key] = value
 
 * `post :create, user: Fabricate.attributes_for(:user)`  
 ~> Frabricate attr for user without saving to DB  
@@ -94,4 +96,8 @@ end
 ~> check if something not blank  
 
 * `expect(something).to be_nil`  
-~> check if something is nil
+~> check if something is nil  
+
+* `let(:user) {Fabricate(:user)}`  
+~> store user with value passsed in the method as block  
+~> let will stored variable and can be in the same test context
