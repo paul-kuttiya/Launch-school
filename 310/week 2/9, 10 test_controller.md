@@ -13,6 +13,7 @@
 ~> `gem 'faker`  
 ~> run `bundle`
 
+### fabricator and fake
 * Fabricate gem will generate obj model each run  
 
 * Faker gem will generate random attributes
@@ -39,7 +40,7 @@ end
 * Overwrite fabricate in spec  
 ~> `Fabricate(:video, title: 'some title')`
 
-# rspec matchers 
+## Useful test tips
 * `describe VideosController do`  
 ~> testing for videos_controller  
 
@@ -78,3 +79,19 @@ end
 
 * run rspec by item  
 ~> `spec/controllers/videos_controller_spec.rb:28`
+
+* `expect(...).to be_instance_of(Class)`  
+~> expect setting obj to be instance of Model class
+
+* `post :create, user: {...}`  
+~> post to action, passing user obj to that action  
+
+* `post :create, user: Fabricate.attributes_for(:user)`  
+~> Frabricate attr for user without saving to DB  
+~> Same as `User.new(attributes)`  
+
+* `expect(flash[:notice]).not_to be_blank`  
+~> check if something not blank  
+
+* `expect(something).to be_nil`  
+~> check if something is nil
