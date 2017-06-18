@@ -16,11 +16,13 @@
 ### fabricator and fake
 * Fabricate gem will generate obj model each run  
 
-* Faker gem will generate random attributes
+* Faker gem will generate random attributes  
+~> will be unique if wrapped in a block eg: `title {...}`
 
 * create `spec/fabricators/video_fabricator.rb`  
 ```ruby
 Fabricator(:video) do
+#will generate unique wrapped in {...}
   title { Faker::Lorem.words(5).join(" ") }
   description { Faker::Lorem.paragraph(2) }
 end
@@ -30,7 +32,7 @@ end
 ```ruby
 Fabricator(:user) do
   email { Faker::Internet.email }
-  password 'password'
+  password: {Faker::Interet.password}
   full_name { Faker::Name.name }
 end
 ```
