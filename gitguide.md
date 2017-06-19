@@ -17,4 +17,10 @@
 
 * timeout user validation  
 ~> `git config --global url."https//{username}@github.com".insteadOf "https://github.com"`  
-~> `git config --global credential.helper 'cache --timeout=28800'`
+~> `git config --global credential.helper 'cache --timeout=28800'`  
+
+* store username and pass  
+~> git config credential.helper store  
+~> git push https://github.com/username/repo.git  
+~> username:...  
+~> password:...  
