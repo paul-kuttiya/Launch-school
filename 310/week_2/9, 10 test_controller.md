@@ -97,6 +97,9 @@ end
 * `expect(flash[:notice]).not_to be_blank`  
 ~> check if something not blank  
 
+* `expect(flash[:notice]).to be_present  
+~> check if something present
+
 * `expect(something).to be_nil`  
 ~> check if something is nil  
 
