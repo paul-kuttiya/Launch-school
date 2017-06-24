@@ -26,4 +26,8 @@
 ~> password:... 
 
 * delete branch  
-~> git push origin --delete branch_name 
+~> github `git push origin --delete branch_name`  
+~> local `git branch -d branch_name`  
+
+* config default push to current origin branch  
+~> `git config --global push.default current`  
