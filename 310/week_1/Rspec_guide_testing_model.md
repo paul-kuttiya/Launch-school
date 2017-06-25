@@ -17,7 +17,6 @@
 * run `rails g rspec:install`
 
 #### Test for models
-
 * create folder models inside spec folder  
 ~> `/spec/models/model_name_spec.rb`  
 
@@ -32,6 +31,11 @@
 ~> describe something  
 ~> spicified what it should do  
 ~> include the test  
+
+* test model methods which are our codes
+~> no need user sign in  
+
+* test rails model association by shoulda gems
 
 * Tests consist of 3 steps:  
 ~> setup the data, state  
