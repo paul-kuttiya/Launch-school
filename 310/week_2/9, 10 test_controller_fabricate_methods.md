@@ -90,7 +90,8 @@ end
 ~> post to action, passing user obj to that action  
 ~> post body will be each user[key] = value
 
-* `post :create, user: Fabricate.attributes_for(:user)`  
+* `post :create, user: Fabricate.attributes_for(:user)` 
+~> Fabricate hash instead of obj from `:user #=> {name: user.name ...}`  
 ~> Frabricate attr for user without saving to DB  
 ~> Same as `User.new(attributes)`  
 
