@@ -1,4 +1,4 @@
-## Association  
+# Association  
 * by default rails will build a method from association and look for query in db 
 when specified `has_many` or `belongs_to` 
 ```ruby
@@ -19,7 +19,7 @@ end
 ```ruby
 #class User
 has_many :followering_relationships, class_name: 'Relationship', foreign_key: 'follower_id'
-has_many :leader_relationships, class_name: 'Relationship', foreign_key: 'leader_id'
+has_many :leading_relationships, class_name: 'Relationship', foreign_key: 'leader_id'
 has_many :reviews
 
 def followering_relationships
@@ -60,23 +60,24 @@ end
 ```
 
 ## Create self association
+### Create people page; index for relationship
 * Create view `views/relationships/index.html.haml`  
 
 * Create controller `relationships_controller`  
 
 * Make view dynamic and create TDD for relationship controller `GET index`  
-~> `it "sets @relationships to current user whom user following`  
+~> `it "sets @relationship to array of relationships which user is following"`  
 ~> `it_behaves_like 'requires sign in'`  
 
 * `DELETE destroy`  
-~> `it_behaves_like "require sign in"`  
+~> `it_behaves_like "requires sign in"`  
 ~> `it deletes follower relationship for following user`  
 ~> `it redirects to the people page`  
 ~> `it does not delete relationtship if a user is not a follower`  
 
 * In TDD process  
-~> create route `get 'people', to: 'relationships#index'`  
-~> create route `delete 'people', to: 'relationships#delete'`  
+~> create get people route `get '/people', to: 'relationships#index'`  
+~> create delete route `resources :relationships, only: [:delete]`   
 ~> create joined self refernece relationships migration `leader_id, follower_id, timestamps`   
 ~> relationships table will return user instance for each query  
 ~> create relationship model  
