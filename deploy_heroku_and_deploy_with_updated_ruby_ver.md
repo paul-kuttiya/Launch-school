@@ -16,8 +16,13 @@ ubuntu:
 * git push heroku master
 
 ## For rails
+* heroku restart
 * heroku run rake db:migrate
 * heroku run rake db:seed
+
+> or `heroku run rake db:reset`
+
+> reset database: `heroku pg:reset DATABASE --confirm`  
 
 ### if error  
 > fatal: 'heroku' does not appear to be a git repository  
