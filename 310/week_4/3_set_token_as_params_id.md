@@ -12,9 +12,8 @@ def change
   #not recommend for large DB
   #Use SQL for large DB
   User.all.each do |user|
-    user.token = user.generate_token
-    #make sure to check model validation to successfully save!
-    user.save
+    #update_column will skip model validation
+    user.update_column(:token, user.generate_token)
   end
 end
 ```
@@ -24,7 +23,14 @@ end
 ~> `.to_param` calls id from model to generate url   
 ~> overwrite `.to_param` method to call on token instead  
 ~> use `before_create` and specify method to generate token  
+
+> `before_create` vs `after_create`  
 ~> `before_create` will generate once when create user  
+~> ActiveRecord::Base create is .new() and .save combined  
+~> `before_create` flow:  
+.new() -> before_create -> .save  
+~> `after_create` flow:  
+.new() -> .save -> after_create, need to call another .save  
 
 ```ruby
 #models/user.rb
