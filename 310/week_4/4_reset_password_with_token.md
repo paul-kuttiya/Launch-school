@@ -1,3 +1,7 @@
+> model-backed form `form_for @model`  creates form for model obj, rails convention will determine url, the obj is new or saved record.  
+---
+>non-model backed form `form_tag` just only creates a form for a model obj.
+
 # Reset password with token
 
 ## forget_password controller
@@ -13,7 +17,7 @@
 <!--form inputs-->
 ```
 
-* TDD for forget_password controller create action   
+* TDD for forget_password controller create action  
 ~>  
 context "with blank input"  
 it "redirects to the forgot password page"  
@@ -21,8 +25,8 @@ it "shows error message"
 
 ~>  
 context "with existing email"  
-it "redirects to forgot password confirmation page"  
 it "sends email to email address"  
+it "redirects to forgot password confirmation page"  
 it "generates user token"  
 
 ~>  
@@ -31,7 +35,7 @@ it "redirects to the forgot password page"
 it "shows error message"
 
 * Implement logic and view in TDD  
-~> forgot_password_confirmation get/post routes and view  
+~> forgot_password_confirmation get routes and view  
 ~> route to get forgot_passwords#confirm action, show that email is sent page   
 ~> create template for forgot_password#confirm    
 ~> implement send_forgot_password method to mailer controller  
@@ -44,7 +48,7 @@ def send_forgot_password(user)
 end
 ```
 ~> create view template for mailer send_forgot_password action  
-~> include user link in email template to reset password with token   
+~> include link in email template for user to reset password with token   
 
 #### Create token column for user  
 * add column for users table, and set default to nil  
@@ -116,7 +120,11 @@ context "with invalid token"
 ~> delete token  
 ~> flash and redirects to signin page  
 ~> redirects to expire page if invalid token  
-
+~> with bcrypt assign password to obj then save  
+```ruby
+user.password = params[:password]
+user.save
+```
 ## Deploy
 * set smtp and default url in `config/production.rb`  
 ```ruby

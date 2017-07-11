@@ -25,7 +25,7 @@ end
 ~> use `before_create` and specify method to generate token  
 
 > `before_create` vs `after_create`  
-~> `before_create` will generate once when create user  
+~> `before_create` will generate once when create instance    
 ~> ActiveRecord::Base create is .new() and .save combined  
 ~> `before_create` flow:  
 .new() -> before_create -> .save  
