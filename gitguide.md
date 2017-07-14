@@ -31,3 +31,6 @@
 
 * config default push to current origin branch  
 ~> `git config --global push.default current`  
+
+* switch heroku project  
+~> `heroku run rake db:migrate --app p-kuttiya-myflix`

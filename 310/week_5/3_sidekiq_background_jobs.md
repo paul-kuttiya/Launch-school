@@ -4,7 +4,7 @@
 * Process jobs asynchronously  
 ~> `install gem sidekiq in gemfile`  
 
-* Will use Redis; in memory processing db to maintain jobs queue  
+* Will use Redis; in memory processing db to maintain jobs queue for background jobs processing   
 ~> Install Redis locally for development and testing   
 
 * Not good to store obj in Sidekiq, store only id  

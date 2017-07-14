@@ -135,4 +135,14 @@ config.action_mailer.default_url_options = { host: "https://p-kuttiya-myflix.her
 ~> open_email('test@example.com')  
 
 ~> current_email.click_link 'link name'  
-=> set current_email after open email and click link in the email    
+=> set current_email after open email and click link in the email  
+
+## Clear emails in test for each test run  
+```ruby
+#spec_helper.rb
+RSpec.configure do |config|
+#other code..
+  #add before block and clear array
+  config.before(:each) { ActionMailer::Base.deliveries.clear }
+end
+```  
