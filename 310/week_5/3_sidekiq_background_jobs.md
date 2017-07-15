@@ -5,7 +5,11 @@
 ~> `install gem sidekiq in gemfile`  
 
 * Will use Redis; in memory processing db to maintain jobs queue for background jobs processing   
+
+* Development and Test ENV   
 ~> Install Redis locally for development and testing   
+~> `{src_directory}/redis-server` to run redis then run rails  
+~> run `sidekiq`  in project root  
 
 * Not good to store obj in Sidekiq, store only id  
 ~> job processor;redis can be on different server on production  
