@@ -108,6 +108,8 @@ end
 ~> store user with value passsed in the method as block  
 ~> let will stored variable and can be in the same test context
 
+* expect(something).to be_new_record  
+~> test if instance is a new record
 ```ruby
 #videos_controller test
 describe VideosController do
