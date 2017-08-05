@@ -6,7 +6,6 @@ ubuntu:
 
 * git files need to be root repo
 * go into folder
-* clone repo/pull with git desktop
 * heroku login
 * heroku create app-name
 

@@ -5,27 +5,27 @@
 ~> check guide  
 ~> access psql  `sudo -i -u postgres psql`  
 ~> `\l` list database, `\du` list roles  
-~> `create role <appname> with createdb login password '<string_pass>';`  
+~> use admin role or if role not yet exists run `CREATE ROLE <appname> WITH CREATEDB LOGIN PASSWORD '<string_pass>';`  
 ~> exit postgresql `ctrl + d` then run `rails _4.1.1_ new app_name --database=postgresql`  
 ~> run `bundle` at project folder  
-~> config `config/database.yaml`  
+~> create db in config file config `config/database.yaml`  
 ```ruby
 development:
   adapter: postgresql
   encoding: unicode
-  database: myapp_dev #config to app_name_dev
+  database: appname_dev #config to app_name_dev
   host: localhost
   pool: 5
-  username: myflix  #config to app name
+  username: pkuttiya  #config to authorize role
   password: p053851238  #config to password
 
 test:
   adapter: postgresql
   encoding: unicode
-  database: myapp_test #config to app_name_test
+  database: appname_test #config to app_name_test
   host: localhost
   pool: 5
-  username: myflix  #config to app_name
+  username: pkuttiya  #config to authorize role
   password: p053851238  #config to password
 ```
 ~> run `rake db:create:all`  

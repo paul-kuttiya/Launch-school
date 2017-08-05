@@ -1,3 +1,8 @@
+* Puma and sidekiq
+~> Puma is webworker, spawn threads for requests  
+~> sidekiq is background processor, use extra spawned threads from puma and run assign job in background.  
+~> will make requests faster since will assign heavy lifting job to background.  
+
 * install add-on 'Redis To Go' on heroku  
 ~> Redis server for heroku  
 ~> Will use Redis; in memory processing db to maintain jobs queue for background jobs processing   

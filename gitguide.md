@@ -8,7 +8,7 @@
 * switch branch  
 ~> `git checkout [branch_name]`
 
-* create new branch  
+* create new branch
 ~> `git chechout [branch_name] -b`
 
 * disable username and pass input validation for certain project  
