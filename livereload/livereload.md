@@ -1,0 +1,1 @@
+* run `bundle exec guard init livereload` to init files  

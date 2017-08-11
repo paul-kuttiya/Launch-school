@@ -22,7 +22,7 @@
 
 * load spec env and associating class  
 ```ruby
-#.rspec
+# .rspec
 --color
 --require 'spec_helper'
 ```
